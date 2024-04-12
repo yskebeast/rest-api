@@ -8,8 +8,10 @@ console.log({ isAuth });
 
 const router = express.Router();
 
-router.get("/posts", feedController.getPosts);
+// GET /feed/posts
+router.get("/posts", isAuth, feedController.getPosts);
 
+// POST /feed/post
 router.post(
   "/post",
   [check("title").trim().isLength({ min: 5 }), check("content").trim().isLength({ min: 5 })],
@@ -20,6 +22,7 @@ router.get("/post/:postId", isAuth, feedController.getPost);
 
 router.put(
   "/post/:postId",
+
   [check("title").trim().isLength({ min: 5 }), check("content").trim().isLength({ min: 5 })],
   feedController.updatePost
 );

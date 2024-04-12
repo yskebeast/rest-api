@@ -13,10 +13,10 @@ const app = express();
 const url = `mongodb+srv://${process.env.PROJECT_NAME}:${process.env.PASSWORD}@express.wiuylkq.mongodb.net/messages?retryWrites=true&w=majority&appName=express`;
 
 const fileStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
     cb(null, "images");
   },
-  filename: function (req, file, cb) {
+  filename: (req, file, cb) => {
     cb(null, uuidv4());
   },
 });
@@ -33,13 +33,13 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // application/json
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"));
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+  res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, PATCH, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
